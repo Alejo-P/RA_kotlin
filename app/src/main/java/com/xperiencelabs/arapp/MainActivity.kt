@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sceneView: ArSceneView
     lateinit var placeButton: ExtendedFloatingActionButton
     private lateinit var modelNode: ArModelNode
+    private lateinit var catModelNode: ArModelNode
     private lateinit var videoNode: VideoNode
     private lateinit var mediaPlayer:MediaPlayer
 
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
         modelNode = ArModelNode(sceneView.engine,PlacementMode.INSTANT).apply {
             loadModelGlbAsync(
-                glbFileLocation = "models/sofa.glb",
+                glbFileLocation = "models/guitar.glb",
                 scaleToUnits = 1f,
                 centerOrigin = Position(-0.5f)
 
@@ -65,8 +66,26 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+
+        catModelNode = ArModelNode(sceneView.engine,PlacementMode.INSTANT).apply {
+            loadModelGlbAsync(
+                glbFileLocation = "models/gato_sub.glb",
+                scaleToUnits = 1f,
+                centerOrigin = Position(x=-0.5f, y = -7f)
+            )
+            {
+                sceneView.planeRenderer.isVisible = true
+                val materialInstance = it.materialInstances[0]
+            }
+            onAnchorChanged = {
+                placeButton.isGone = it != null
+            }
+
+        }
+
         sceneView.addChild(modelNode)
         modelNode.addChild(videoNode)
+        sceneView.addChild(catModelNode)
 
     }
 
